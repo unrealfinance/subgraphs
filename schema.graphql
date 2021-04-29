@@ -1,0 +1,6 @@
+type ExampleEntity @entity {
+  id: ID!
+  count: BigInt!
+  metadata: Bytes! # bytes32
+  futureIndex: BigInt! # uint256
+}

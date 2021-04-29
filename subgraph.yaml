@@ -1,0 +1,35 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Core
+    network: kovan
+    source:
+      address: "0xee85d401835561De62b874147Eca8A4Fe1D5cBFf"
+      abi: Core
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - FutureStarted
+        - NewStreamCreated
+        - NewSubscription
+        - PrincipalRedeemed
+        - Unsubscribed
+      abis:
+        - name: Core
+          file: ./abis/Core.json
+      eventHandlers:
+        - event: FutureStarted(bytes32,uint256)
+          handler: handleFutureStarted
+        - event: NewStreamCreated(bytes32)
+          handler: handleNewStreamCreated
+        - event: NewSubscription(bytes32,address,uint256)
+          handler: handleNewSubscription
+        - event: PrincipalRedeemed(bytes32,uint256,uint256)
+          handler: handlePrincipalRedeemed
+        - event: Unsubscribed(bytes32,address,uint256)
+          handler: handleUnsubscribed
+      file: ./src/mapping.ts
