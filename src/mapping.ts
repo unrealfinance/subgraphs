@@ -16,10 +16,10 @@ export function handleFutureStarted(event: FutureStarted): void {
   if (epoch == null) epoch = new Epoch(event.params.metadata.toHex())
 
   epoch.stream = stream.id
-  epoch.number = BigInt.fromI32(event.params.futureIndex) + BigInt.fromString('1') 
+  epoch.number = event.params.futureIndex
   epoch.save()
   
-  if (stream !== null) stream.epochs = [...stream.epochs,epoch.id]
+  if (stream !== null) stream.epochs = stream.epochs.concat([event.params.metadata.toHex()])
   
   stream.save()
   
@@ -48,8 +48,8 @@ export function handleNewSubscription(event: NewSubscription): void {
   user.save()
 
   if(stream !== null) {
-    user.streams = [...user.streams, stream.id]
-    stream.users = [...stream.users, user.id]
+    user.streams = user.streams.concat([event.params.metadata.toHex()])
+    stream.users = stream.users.concat([event.params.user.toHex()])
     user.save()
     stream.save()
   }
@@ -68,8 +68,8 @@ export function handleUnsubscribed(event: Unsubscribed): void {
   user.save()
 
   if(stream !== null) {
-    user.streams = user.streams.filter(ustream => ustream !== stream.id)
-    stream.users = stream.users.filter(suser => suser !== user.id)
+    user.streams = user.streams.filter(ustream => ustream !== event.params.metadata.toHex())
+    stream.users = stream.users.filter(suser => suser !== event.params.user.toHex())
     user.save()
     stream.save()
   }
