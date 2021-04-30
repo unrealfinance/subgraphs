@@ -1,6 +1,21 @@
-type ExampleEntity @entity {
-  id: ID!
-  count: BigInt!
-  metadata: Bytes! # bytes32
-  futureIndex: BigInt! # uint256
+
+type User @entity {
+  id:ID!
+  address:Bytes!
+  streams:[Stream!]  @derivedFrom(field: "users")
 }
+
+type Stream @entity {
+  id: ID!
+  meta:Bytes!
+  users:[User!]
+  epochs: [Epoch!] @derivedFrom(field: "stream")
+}
+
+
+type Epoch @entity {
+  id: ID!
+  stream:Stream!
+  number: BigInt!
+}
+
