@@ -9,9 +9,8 @@ type Stream @entity {
   id: ID!
   meta:Bytes!
   users:[User!]
-  epochs: [Epoch!] @derivedFrom(field: "stream")
+  epochs: [Epoch!]
 }
-
 
 type Epoch @entity {
   id: ID!

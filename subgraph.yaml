@@ -3,11 +3,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Core
-    network: mainnet
+    name: CoreMock
+    network: localhost
     source:
-      address: "0xee85d401835561De62b874147Eca8A4Fe1D5cBFf"
-      abi: Core
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      abi: CoreMock
+      startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -19,8 +20,8 @@ dataSources:
         - PrincipalRedeemed
         - Unsubscribed
       abis:
-        - name: Core
-          file: ./abis/Core.json
+        - name: CoreMock
+          file: ./abis/CoreMock.json
       eventHandlers:
         - event: FutureStarted(bytes32,uint256)
           handler: handleFutureStarted
@@ -28,8 +29,7 @@ dataSources:
           handler: handleNewStreamCreated
         - event: NewSubscription(bytes32,address,uint256)
           handler: handleNewSubscription
-        - event: PrincipalRedeemed(bytes32,uint256,uint256)
-          handler: handlePrincipalRedeemed
+
         - event: Unsubscribed(bytes32,address,uint256)
           handler: handleUnsubscribed
       file: ./src/mapping.ts
