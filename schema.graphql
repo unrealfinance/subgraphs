@@ -2,7 +2,7 @@
 type User @entity {
   id:ID!
   address:Bytes!
-  streams:[Stream!]  @derivedFrom(field: "users")
+  streams:[Stream!] 
 }
 
 type Stream @entity {
