@@ -1,11 +1,11 @@
 import { BigInt, log } from "@graphprotocol/graph-ts"
 import {
-  Core,
+  CoreMock,
   FutureStarted,
   NewStreamCreated,
   NewSubscription,
   Unsubscribed
-} from "../generated/Core/Core"
+} from "../generated/CoreMock/CoreMock"
 import {User,Stream,Epoch } from "../generated/schema"
 
 export function handleFutureStarted(event: FutureStarted): void {
