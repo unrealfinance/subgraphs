@@ -1,44 +1,44 @@
 import { BigInt, log } from "@graphprotocol/graph-ts"
 import {
-  CoreMock,
-  FutureStarted,
-  NewStreamCreated,
-  NewSubscription,
+  Core,
+  EpochStarted,
+  NewStream,
+  Subscribed,
   Unsubscribed
-} from "../generated/CoreMock/CoreMock"
+} from "../generated/Core/Core"
 import {User,Stream,Epoch } from "../generated/schema"
 
-export function handleFutureStarted(event: FutureStarted): void {
-  let epoch = Epoch.load(event.params.metadata.toHex());
-  let stream = Stream.load(event.params.metadata.toHex())
+export function handleEpochStarted(event: EpochStarted): void {
+  let epoch = Epoch.load(event.params.streamKey.toHex());
+  let stream = Stream.load(event.params.streamKey.toHex())
   
-  if (epoch == null) epoch = new Epoch(event.params.metadata.toHex())
+  if (epoch == null) epoch = new Epoch(event.params.streamKey.toHex())
 
   epoch.stream = stream.id
   epoch.number = event.params.futureIndex + BigInt.fromString('1')
   epoch.save()
   
-  if (stream !== null) stream.epochs = stream.epochs.concat([event.params.metadata.toHex()])
+  if (stream !== null) stream.epochs = stream.epochs.concat([event.params.streamKey.toHex()])
   
   stream.save()
   
 }
 
-export function handleNewStreamCreated(event: NewStreamCreated): void {
-  let stream = Stream.load(event.params.metadata.toHex())
+export function handleNewStream(event: NewStream): void {
+  let stream = Stream.load(event.params.streamKey.toHex())
   if (stream == null) {
-    stream = new Stream(event.params.metadata.toHex())
-    stream.meta = event.params.metadata
+    stream = new Stream(event.params.streamKey.toHex())
+    stream.meta = event.params.streamKey
     stream.users = []
     stream.epochs = []
   }
-  stream.meta = event.params.metadata
+  stream.meta = event.params.streamKey
   stream.save();
 }
 
-export function handleNewSubscription(event: NewSubscription): void {
+export function handleSubscribed(event: Subscribed): void {
 
-  let stream = Stream.load(event.params.metadata.toHex())
+  let stream = Stream.load(event.params.streamKey.toHex())
   let user = User.load(event.params.user.toHex())
   if (user == null) {
     user = new User(event.params.user.toHex())
@@ -48,7 +48,7 @@ export function handleNewSubscription(event: NewSubscription): void {
   user.save()
 
   if(stream !== null) {
-    user.streams = user.streams.concat([event.params.metadata.toHex()])
+    user.streams = user.streams.concat([event.params.streamKey.toHex()])
     stream.users = stream.users.concat([event.params.user.toHex()])
     user.save()
     stream.save()
@@ -57,7 +57,7 @@ export function handleNewSubscription(event: NewSubscription): void {
 
 
 export function handleUnsubscribed(event: Unsubscribed): void {
-  let stream = Stream.load(event.params.metadata.toHex())
+  let stream = Stream.load(event.params.streamKey.toHex())
   let user = User.load(event.params.user.toHex())
   if (user == null) {
     user = new User(event.params.user.toHex())
@@ -67,7 +67,7 @@ export function handleUnsubscribed(event: Unsubscribed): void {
   user.save()
 
   if(stream !== null) {
-      let streamIndex = user.streams.indexOf(event.params.metadata.toHexString());
+      let streamIndex = user.streams.indexOf(event.params.streamKey.toHexString());
       let users = stream.users;
 
       const streams = user.streams;

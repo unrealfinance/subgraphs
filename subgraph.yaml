@@ -3,32 +3,32 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: CoreMock
+    name: Core
     network: localhost
     source:
       address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-      abi: CoreMock
+      abi: Core
       startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - FutureStarted
-        - NewStreamCreated
-        - NewSubscription
+        - EpochStarted
+        - NewStream
+        - Subscribed
         - PrincipalRedeemed
         - Unsubscribed
       abis:
-        - name: CoreMock
-          file: ./abis/CoreMock.json
+        - name: Core
+          file: ./abis/Core.json
       eventHandlers:
-        - event: FutureStarted(bytes32,uint256)
-          handler: handleFutureStarted
-        - event: NewStreamCreated(bytes32)
-          handler: handleNewStreamCreated
-        - event: NewSubscription(bytes32,address,uint256)
-          handler: handleNewSubscription
+        - event: EpochStarted(bytes32,uint256)
+          handler: handleEpochStarted
+        - event: NewStream(bytes32)
+          handler: handleNewStream
+        - event: Subscribed(bytes32,address,uint256)
+          handler: handleSubscribed
 
         - event: Unsubscribed(bytes32,address,uint256)
           handler: handleUnsubscribed
