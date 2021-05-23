@@ -17,7 +17,7 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      ethereum: 'localhost:http://172.18.0.1:8545'
+      ethereum: 'kovan:https://eth-kovan.alchemyapi.io/v2/xxx'
       RUST_LOG: info
   ipfs:
     image: ipfs/go-ipfs:v0.4.23

@@ -18,3 +18,15 @@ type Epoch @entity {
   number: BigInt!
 }
 
+
+type OTTOKEN @entity {
+  id: ID!
+  symbol:String!
+  name:String!
+}
+
+type YieldToken @entity {
+  id: ID!
+  symbol:String!
+  name:String!
+}

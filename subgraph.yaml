@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Core
-    network: localhost
+    network: kovan
     source:
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      address: "0xbf5292d67eC2752bAb725F63e2f571fdC64D2997"
       abi: Core
-      startBlock: 1
+      startBlock: 25009348
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -22,6 +22,8 @@ dataSources:
       abis:
         - name: Core
           file: ./abis/Core.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: EpochStarted(bytes32,uint256)
           handler: handleEpochStarted
