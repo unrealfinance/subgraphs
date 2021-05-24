@@ -6,9 +6,9 @@ dataSources:
     name: Core
     network: kovan
     source:
-      address: "0xbf5292d67eC2752bAb725F63e2f571fdC64D2997"
+      address: "0x57c9e8D17bE3f506c6527e27362B905842E0340e"
       abi: Core
-      startBlock: 25009348
+      startBlock: 25036137
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -27,7 +27,7 @@ dataSources:
       eventHandlers:
         - event: EpochStarted(bytes32,uint256)
           handler: handleEpochStarted
-        - event: NewStream(bytes32)
+        - event: NewStream(address,string,uint256,bytes32)
           handler: handleNewStream
         - event: Subscribed(bytes32,address,uint256)
           handler: handleSubscribed

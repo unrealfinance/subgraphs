@@ -2,7 +2,15 @@
 type User @entity {
   id:ID!
   address:Bytes!
-  streams:[Stream!] 
+  streams:[Stream!]
+  subscriptions: [TokenSubscription!],
+}
+
+type TokenSubscription @entity {
+  id:ID!,
+  stream: Stream!,
+  user: User!,
+  amount:BigInt!
 }
 
 type Stream @entity {
@@ -10,6 +18,9 @@ type Stream @entity {
   meta:Bytes!
   users:[User!]
   epochs: [Epoch!]
+  underlying:String
+  protocol:String
+  durationBlocks:BigInt
 }
 
 type Epoch @entity {
