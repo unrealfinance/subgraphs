@@ -33,6 +33,7 @@ export function handleEpochStarted(event: EpochStarted): void {
     yieldToken = new YieldToken(ytAddress.toHexString())
     yieldToken.symbol = symbol
     yieldToken.name = name
+    yieldToken.address = ytAddress.toHexString()
   }
   yieldToken.save()
 
@@ -40,6 +41,8 @@ export function handleEpochStarted(event: EpochStarted): void {
 
   if (stream !== null)
     stream.epochs = stream.epochs.concat([event.params.streamKey.toHex()])
+    stream.yieldToken = ytAddress.toHexString()
+
 
   stream.save()
 }
@@ -67,9 +70,10 @@ export function handleNewStream(event: NewStream): void {
       otToken = new OTTOKEN(OTaddress.toHexString())
       otToken.symbol = symbol
       otToken.name = name
+      otToken.address = OTaddress.toHexString()
     }
     otToken.save()
-
+    stream.otToken = OTaddress.toHexString()
     stream.meta = event.params.streamKey
     stream.save()
   }

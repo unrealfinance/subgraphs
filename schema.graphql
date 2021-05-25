@@ -20,7 +20,9 @@ type Stream @entity {
   epochs: [Epoch!]
   underlying:String
   protocol:String
-  durationBlocks:BigInt
+  durationBlocks:BigInt,
+  otToken:OTTOKEN,
+  yieldToken:YieldToken,
 }
 
 type Epoch @entity {
@@ -34,10 +36,12 @@ type OTTOKEN @entity {
   id: ID!
   symbol:String!
   name:String!
+  address:String!
 }
 
 type YieldToken @entity {
   id: ID!
   symbol:String!
   name:String!
+  address:String!
 }
