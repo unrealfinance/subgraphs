@@ -12,10 +12,10 @@ const coreAddress: Address = Address.fromString(
   '0x57c9e8D17bE3f506c6527e27362B905842E0340e',
 )
 export function handleEpochStarted(event: EpochStarted): void {
-  let epoch = Epoch.load(event.params.streamKey.toHex())
+  let epoch = Epoch.load(event.params.streamKey.toHex()+ "-" + event.params.futureIndex.toHexString())
   let stream = Stream.load(event.params.streamKey.toHex())
 
-  if (epoch == null) epoch = new Epoch(event.params.streamKey.toHex())
+  if (epoch == null) epoch = new Epoch(event.params.streamKey.toHex()+ "-" + event.params.futureIndex.toHexString())
 
   epoch.stream = stream.id
   epoch.number = event.params.futureIndex
@@ -36,12 +36,12 @@ export function handleEpochStarted(event: EpochStarted): void {
     yieldToken.address = ytAddress.toHexString()
   }
   yieldToken.save()
-
+  epoch.yieldToken = ytAddress.toHexString()
   epoch.save()
 
   if (stream !== null)
-    stream.epochs = stream.epochs.concat([event.params.streamKey.toHex()])
-    stream.yieldToken = ytAddress.toHexString()
+    stream.epochs = stream.epochs.concat([event.params.streamKey.toHex()+ "-" + event.params.futureIndex.toHexString()])
+
 
 
   stream.save()

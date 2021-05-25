@@ -22,13 +22,13 @@ type Stream @entity {
   protocol:String
   durationBlocks:BigInt,
   otToken:OTTOKEN,
-  yieldToken:YieldToken,
 }
 
 type Epoch @entity {
   id: ID!
   stream:Stream!
   number: BigInt!
+  yieldToken:YieldToken,
 }
 
 
