@@ -116,6 +116,7 @@ export function handleSubscribed(event: Subscribed): void {
       epoch.subscriptions = epoch.subscriptions.concat([event.params.streamKey.toHex() + event.params.user.toHex()])
     }
     epoch.save()
+    subscription.epoch = epochid;
     user.save()
     stream.save()
   }
