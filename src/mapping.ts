@@ -16,7 +16,7 @@ export function handleEpochStarted(event: EpochStarted): void {
   let stream = Stream.load(event.params.streamKey.toHex())
 
   if (epoch == null) epoch = new Epoch(event.params.streamKey.toHex()+ "-" + event.params.futureIndex.toHexString())
-
+  epoch.subscriptions = []
   epoch.stream = stream.id
   epoch.number = event.params.futureIndex
 
@@ -109,6 +109,13 @@ export function handleSubscribed(event: Subscribed): void {
   if (stream !== null) {
     user.streams = user.streams.concat([event.params.streamKey.toHex()])
     stream.users = stream.users.concat([event.params.user.toHex()])
+    let epochs = stream.epochs;
+    let epochid:string = epochs.reverse()[0];
+    let epoch  = Epoch.load(epochid)
+    if(epoch !== null) {
+      epoch.subscriptions = epoch.subscriptions.concat([event.params.streamKey.toHex() + event.params.user.toHex()])
+    }
+    epoch.save()
     user.save()
     stream.save()
   }

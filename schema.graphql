@@ -29,6 +29,7 @@ type Epoch @entity {
   stream:Stream!
   number: BigInt!
   yieldToken:YieldToken,
+  subscriptions:[TokenSubscription!]
 }
 
 
