@@ -117,6 +117,7 @@ export function handleSubscribed(event: Subscribed): void {
     }
     epoch.save()
     subscription.epoch = epochid;
+    subscription.save()
     user.save()
     stream.save()
   }
