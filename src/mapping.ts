@@ -57,6 +57,7 @@ export function handleEpochStarted(event: EpochStarted): void {
   otToken.stream = stream.id
   otToken.save()
   stream.otToken = OTaddress.toHexString()
+  stream.currentEpoch = event.params.streamKey.toHex() + "-" + event.params.futureIndex.toHexString()
   stream.save()
 }
 

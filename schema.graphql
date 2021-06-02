@@ -24,6 +24,7 @@ type Stream @entity {
   durationBlocks:BigInt,
   otToken:OTTOKEN,
   tvl:BigInt,
+  currentEpoch:Epoch
   startBlockNumber: BigInt
 }
 
