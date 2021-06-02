@@ -68,7 +68,7 @@ export function handleNewStream(event: NewStream): void {
     stream.protocol = event.params.protocol
     stream.underlying = event.params.underlying.toHexString()
     stream.durationBlocks = event.params.durationBlocks
-
+    stream.tvl = BigInt.fromI32(0)
     stream.meta = event.params.streamKey
     stream.save()
   }
@@ -104,6 +104,7 @@ export function handleSubscribed(event: Subscribed): void {
   if (stream !== null) {
     user.streams = user.streams.concat([event.params.streamKey.toHex()])
     stream.users = stream.users.concat([event.params.user.toHex()])
+    stream.tvl = stream.tvl.plus(event.params.amount)
     let epochs = stream.epochs;
     let epochid: string = epochs.reverse()[0];
     let epoch = Epoch.load(epochid)
@@ -136,7 +137,7 @@ export function handleUnsubscribed(event: Unsubscribed): void {
   if (stream !== null) {
     let streamIndex = user.streams.indexOf(event.params.streamKey.toHexString())
     let users = stream.users
-
+    stream.tvl = stream.tvl.minus(event.params.amount)
     const streams = user.streams
     if (streamIndex > -1) streams.splice(streamIndex, 1)
 

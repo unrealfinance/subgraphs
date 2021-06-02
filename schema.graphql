@@ -23,6 +23,7 @@ type Stream @entity {
   protocol:String
   durationBlocks:BigInt,
   otToken:OTTOKEN,
+  tvl:BigInt,
 }
 
 type Epoch @entity {
