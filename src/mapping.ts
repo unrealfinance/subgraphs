@@ -19,6 +19,7 @@ export function handleEpochStarted(event: EpochStarted): void {
   epoch.subscriptions = []
   epoch.stream = stream.id
   epoch.number = event.params.futureIndex
+  epoch.startBlockNumber = event.block.number
 
   let core = Core.bind(coreAddress)
   let OTaddress = core.getOT(event.params.streamKey)
@@ -32,7 +33,7 @@ export function handleEpochStarted(event: EpochStarted): void {
     otToken.name = contractOt.name()
     otToken.address = OTaddress.toHexString()
   }
-  otToken.save()
+
 
   let ytAddress = core.getYT(event.params.streamKey, event.params.futureIndex)
 
@@ -53,7 +54,8 @@ export function handleEpochStarted(event: EpochStarted): void {
 
   if (stream !== null)
     stream.epochs = stream.epochs.concat([event.params.streamKey.toHex() + "-" + event.params.futureIndex.toHexString()])
-
+  otToken.stream = stream.id
+  otToken.save()
   stream.otToken = OTaddress.toHexString()
   stream.save()
 }
@@ -70,6 +72,7 @@ export function handleNewStream(event: NewStream): void {
     stream.durationBlocks = event.params.durationBlocks
     stream.tvl = BigInt.fromI32(0)
     stream.meta = event.params.streamKey
+    stream.startBlockNumber = event.block.number
     stream.save()
   }
 }
