@@ -47,6 +47,8 @@ export function handleEpochStarted(event: EpochStarted): void {
     yieldToken.symbol = symbol
     yieldToken.name = name
     yieldToken.address = ytAddress.toHexString()
+    yieldToken.stream = event.params.streamKey.toHex()
+    yieldToken.epoch = event.params.streamKey.toHex() + "-" + event.params.futureIndex.toHexString()
   }
   yieldToken.save()
   epoch.yieldToken = ytAddress.toHexString()

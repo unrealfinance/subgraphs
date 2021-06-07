@@ -51,4 +51,6 @@ type YieldToken @entity {
   symbol:String!
   name:String!
   address:String!
+  stream:Stream
+  epoch:Epoch
 }
