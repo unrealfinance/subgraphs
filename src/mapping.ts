@@ -3,14 +3,15 @@ import {
   Core,
   EpochStarted,
   NewStream,
-  Subscribed,
+  Deposited,
   Unsubscribed,
 } from '../generated/Core/Core'
 import { ERC20 } from '../generated/Core/ERC20'
-import { User, Stream, Epoch, OTTOKEN, YieldToken, TokenSubscription } from '../generated/schema'
+import { User, Stream, Epoch, OwnerShipToken, YieldToken, TokenSubscription } from '../generated/schema'
 const coreAddress: Address = Address.fromString(
-  '0xcFaE8aC2A6a87F7194b0cB0eC9C53811F6350126',
+  '0x210f83DaC34A15e6ac2B804045B2891Cfc3b2940',
 )
+
 export function handleEpochStarted(event: EpochStarted): void {
   let epoch = Epoch.load(event.params.streamKey.toHex() + "-" + event.params.futureIndex.toHexString())
   let stream = Stream.load(event.params.streamKey.toHex())
@@ -20,20 +21,23 @@ export function handleEpochStarted(event: EpochStarted): void {
   epoch.stream = stream.id
   epoch.number = event.params.futureIndex
   epoch.startBlockNumber = event.block.number
+  stream.tvl = BigInt.fromI32(0)
 
   let core = Core.bind(coreAddress)
   let OTaddress = core.getOT(event.params.streamKey)
   let contractOt = ERC20.bind(OTaddress)
 
-  let otToken = OTTOKEN.load(OTaddress.toHexString())
+  let otToken = OwnerShipToken.load(OTaddress.toHexString())
 
   if (otToken == null) {
-    otToken = new OTTOKEN(OTaddress.toHexString())
+    otToken = new OwnerShipToken(OTaddress.toHexString())
     otToken.symbol = contractOt.symbol()
     otToken.name = contractOt.name()
     otToken.address = OTaddress.toHexString()
   }
-
+  otToken.epoch = epoch.id
+  epoch.otToken = OTaddress.toHexString()
+  epoch.save()
 
   let ytAddress = core.getYT(event.params.streamKey, event.params.futureIndex)
 
@@ -56,9 +60,7 @@ export function handleEpochStarted(event: EpochStarted): void {
 
   if (stream !== null)
     stream.epochs = stream.epochs.concat([event.params.streamKey.toHex() + "-" + event.params.futureIndex.toHexString()])
-  otToken.stream = stream.id
-  otToken.save()
-  stream.otToken = OTaddress.toHexString()
+
   stream.currentEpoch = event.params.streamKey.toHex() + "-" + event.params.futureIndex.toHexString()
   stream.save()
 }
@@ -73,13 +75,12 @@ export function handleNewStream(event: NewStream): void {
     stream.protocol = event.params.protocol
     stream.underlying = event.params.underlying.toHexString()
     stream.durationBlocks = event.params.durationBlocks
-    stream.tvl = BigInt.fromI32(0)
     stream.meta = event.params.streamKey
     stream.startBlockNumber = event.block.number
     stream.save()
   }
 }
-export function handleSubscribed(event: Subscribed): void {
+export function handleDeposited(event: Deposited): void {
   let subscription = TokenSubscription.load(event.params.streamKey.toHex() + event.params.user.toHex())
   if (subscription == null) {
     subscription = new TokenSubscription(event.params.streamKey.toHex() + event.params.user.toHex())

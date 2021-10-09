@@ -6,7 +6,7 @@ dataSources:
     name: Core
     network: kovan
     source:
-      address: "0xcFaE8aC2A6a87F7194b0cB0eC9C53811F6350126"
+      address: "0x210f83DaC34A15e6ac2B804045B2891Cfc3b2940"
       abi: Core
       startBlock: 25215400
     mapping:
@@ -16,22 +16,23 @@ dataSources:
       entities:
         - EpochStarted
         - NewStream
-        - Subscribed
-        - PrincipalRedeemed
-        - Unsubscribed
+        - Deposited
+        - PrincipleRedeemed
+        - YieldRedeemed
       abis:
         - name: Core
           file: ./abis/Core.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
-        - event: EpochStarted(bytes32,uint256)
-          handler: handleEpochStarted
-        - event: NewStream(address,string,uint256,bytes32)
+        - event: NewStream(address, string, uint256, bytes32 streamKey)
           handler: handleNewStream
-        - event: Subscribed(bytes32,address,uint256)
+        - event: EpochStarted(bytes32, uint256)
+          handler: handleEpochStarted
+        - event: Deposited(bytes32, address, uint256)
           handler: handleSubscribed
-
-        - event: Unsubscribed(bytes32,address,uint256)
-          handler: handleUnsubscribed
+        - event: PrincipleRedeemed(bytes32 streamKey, uint256 epoch, uint256 amount)
+          handler: handlePrincipleRedeemed
+        - event: YieldRedeemed(bytes32 streamKey, uint256 epoch, uint256 amount)
+          handler: handleYeildRedeemed
       file: ./src/mapping.ts

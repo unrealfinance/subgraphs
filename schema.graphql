@@ -22,8 +22,6 @@ type Stream @entity {
   underlying:String
   protocol:String
   durationBlocks:BigInt,
-  otToken:OTTOKEN,
-  tvl:BigInt,
   currentEpoch:Epoch
   startBlockNumber: BigInt
 }
@@ -32,18 +30,20 @@ type Epoch @entity {
   id: ID!
   stream:Stream!
   number: BigInt!
+  tvl:BigInt,
   yieldToken:YieldToken,
+  otToken:OwnerShipToken,
   subscriptions:[TokenSubscription!]
   startBlockNumber: BigInt
 }
 
 
-type OTTOKEN @entity {
+type OwnerShipToken @entity {
   id: ID!
   symbol:String!
   name:String!
   address:String!
-  stream:Stream
+  epoch:Epoch
 }
 
 type YieldToken @entity {
