@@ -2,26 +2,26 @@
 type User @entity {
   id:ID!
   address:Bytes!
-  streams:[Stream!]
   subscriptions: [TokenSubscription!],
 }
 
 type TokenSubscription @entity {
   id:ID!
-  stream: Stream!
-  user: User!
+  stream:Stream!
+  user:User!
   amount:BigInt!
-  epoch: Epoch
+  epoch:Epoch
+  redeemPrinciple:Boolean!
+  redeemYield:Boolean!
 }
 
 type Stream @entity {
   id: ID!
   meta:Bytes!
-  users:[User!]
   epochs: [Epoch!]
   underlying:String
   protocol:String
-  durationBlocks:BigInt,
+  durationBlocks:BigInt
   currentEpoch:Epoch
   startBlockNumber: BigInt
 }
@@ -30,10 +30,10 @@ type Epoch @entity {
   id: ID!
   stream:Stream!
   number: BigInt!
-  tvl:BigInt,
-  yieldToken:YieldToken,
-  otToken:OwnerShipToken,
-  subscriptions:[TokenSubscription!]
+  tvl:BigInt
+  users:[User]
+  yieldToken:YieldToken!
+  otToken:OwnerShipToken!
   startBlockNumber: BigInt
 }
 

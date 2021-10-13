@@ -25,14 +25,14 @@ dataSources:
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
-        - event: NewStream(address, string, uint256, bytes32 streamKey)
+        - event: NewStream(address, string, uint256, bytes32)
           handler: handleNewStream
         - event: EpochStarted(bytes32, uint256)
           handler: handleEpochStarted
-        - event: Deposited(bytes32, address, uint256)
+        - event: Deposited(bytes32, address, uint256, uint256)
           handler: handleSubscribed
-        - event: PrincipleRedeemed(bytes32 streamKey, uint256 epoch, uint256 amount)
+        - event: PrincipleRedeemed(bytes32, uint256, uint256)
           handler: handlePrincipleRedeemed
-        - event: YieldRedeemed(bytes32 streamKey, uint256 epoch, uint256 amount)
+        - event: YieldRedeemed(bytes32 uint256, uint256)
           handler: handleYeildRedeemed
       file: ./src/mapping.ts
